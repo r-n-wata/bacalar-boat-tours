@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* globals.css */
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+
+/* Theme Variables */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --primary: #0e7490;
+  --secondary: #facc15;
+  --muted: #f3f4f6;
+  --border-radius: 0.5rem;
+  --transition: 200ms ease-in-out;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --muted: #1f2937;
+  }
+}
+
+/* Base Styles */
+body {
+  @apply bg-[var(--background)] text-[var(--foreground)] font-sans;
+  transition: background var(--transition), color var(--transition);
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-bold text-[var(--foreground)] tracking-tight;
+}
+
+/* Links */
+a {
+  @apply text-[var(--primary)] hover:underline transition-colors duration-200;
+}
+
+/* Buttons */
+.btn {
+  @apply inline-block px-4 py-2 rounded-[var(--border-radius)] bg-[var(--primary)] text-white font-medium transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98];
+}
+
+.btn-secondary {
+  @apply bg-[var(--secondary)] text-black;
+}
+
+/* Card */
+.card {
+  @apply bg-[var(--muted)] rounded-[var(--border-radius)] p-4 shadow;
+}
+
+/* Input Fields */
+input,
+textarea,
+select {
+  @apply px-3 py-2 border border-gray-300 rounded-[var(--border-radius)] bg-white text-black focus:outline-none focus:ring-2 focus:ring-[var(--primary)];
+}
+
+/* Utility Helpers */
+.text-muted {
+  @apply text-gray-500;
+}
+
+.container {
+  @apply max-w-7xl mx-auto px-4;
+}
