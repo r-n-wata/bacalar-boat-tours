@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Operator {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  phone     String
+  password  String
+  logo      String?
+  terms     Boolean  @default(false)
+  sailing   Boolean  @default(false)
+  diving    Boolean  @default(false)
+  option3   Boolean  @default(false)
+  role      String   @default("operator") 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id             Int       @id @default(autoincrement())
+  name           String?   
+  email          String    @unique
+  password       String?   
+  image          String?
+  emailVerified  DateTime?
+
+  client         Client?   @relation(fields: [clientId], references: [id])
+  clientId       Int?      @unique
+  
+  role           String    @default("client") // "client" or "operator"
+  roleId         Int?                          // ID of either client or operator record
+
+  accounts       Account[]
+  sessions       Session[]
+}
+
+
+model Client {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  phone     String   @default("") // default empty if not captured from Google
+  password  String?  // optional if only signing in with Google
+  terms     Boolean  @default(false)
+  role      String   @default("client") 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User?
+}
+
+
+model Account {
+  id                 Int       @id @default(autoincrement())
+  userId             Int
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?   @db.Text
+  access_token       String?   @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?   @db.Text
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           Int      @id @default(autoincrement())
+  sessionToken String   @unique
+  userId       Int
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
