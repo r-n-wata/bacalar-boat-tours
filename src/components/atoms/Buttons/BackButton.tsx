@@ -30,7 +30,8 @@ const BackButton: React.FC<BackButtonProps> = ({
     <button
       onClick={handleClick}
       className={clsx(
-        "flex items-center gap-2 text-sm font-medium bg-white/80 text-primary border border-primary rounded-full px-4 py-2 hover:bg-primary hover:text-white transition"
+        "fixed top-4 left-4 z-50 flex items-center gap-2 text-sm font-medium bg-white/80 text-primary border border-primary rounded-full px-4 py-2 hover:bg-primary hover:text-white transition",
+        className // include optional custom classes
       )}
     >
       <ArrowLeft className="w-4 h-4" />
