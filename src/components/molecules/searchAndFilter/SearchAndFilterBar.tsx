@@ -4,7 +4,7 @@ import React from "react";
 type Props = {
   filters: any;
   setSearchTerm: (term: string) => void;
-  onSearch: (term: string) => void;
+  onSearch?: (term: string) => void;
   setFilters: (filters: any) => void;
 };
 

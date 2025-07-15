@@ -1,33 +1,36 @@
 "use client";
-
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import { Menu, X } from "lucide-react";
+import { logOut } from "@/auth/nextjs/actions";
 import React from "react";
-import { useSession, signOut } from "next-auth/react"; // 👈 ADD THIS
 
-const navLinks = [
-  { href: "/", label: "HOME" },
-  { href: "/public/tours", label: "TOURS" },
-  { href: "/destinations", label: "DESTINATIONS" },
-  { href: "/restaurants", label: "RESTAURANTS" },
-];
-
-export default function Navbar() {
+export default function Navbar({ user }: any) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const { data: session } = useSession(); // 👈 GET session data
-
-  console.log("session: ", session);
-
-  const isLoggedIn = !!session;
+  const [isLoggedIn, setIsLoggedIn] = useState(!!user?.name);
+  // Generate links dynamically based on role
+  const navLinks = [
+    { href: "/", label: "HOME" },
+    { href: "/tours", label: "TOURS" },
+    { href: "/destinations", label: "DESTINATIONS" },
+    { href: "/restaurants", label: "RESTAURANTS" },
+    ...(user?.role === "operator"
+      ? [{ href: "/operator/dashboard", label: "OPERATOR" }]
+      : []),
+    ...(user?.role === "user" ? [{ href: "/profile", label: "PROFILE" }] : []),
+  ];
 
   return (
     <nav className="bg-[#0CAFB9] text-white py-5 px-4 md:px-12">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <div className="text-lg font-bold tracking-wide uppercase">Brand</div>
+        <div className="text-lg font-bold tracking-wide uppercase">
+          <Link href="/" className="text-white hover:text-orange-300">
+            <img className="w-14 rounded-b-full" src="/logo.png" alt="logo" />
+          </Link>
+        </div>
 
         {/* Desktop Nav Links */}
         <ul className="hidden md:flex gap-8 text-sm font-bold tracking-wide uppercase">
@@ -56,25 +59,48 @@ export default function Navbar() {
           {!isLoggedIn ? (
             <>
               <Link
-                href="/auth/signin"
+                href="/sign-in"
                 className="text-white border border-white px-4 py-1 rounded-full text-sm hover:bg-white hover:text-[#0CAFB9] transition-colors"
               >
                 Sign In
               </Link>
               <Link
-                href="/auth/signup"
+                href="/sign-up"
                 className="bg-orange-400 text-white px-4 py-1 rounded-full text-sm hover:bg-orange-500 transition-colors"
               >
                 Sign Up
               </Link>
             </>
           ) : (
-            <button
-              onClick={() => signOut({ callbackUrl: "/" })}
-              className="bg-white text-[#0CAFB9] px-4 py-1 rounded-full text-sm hover:bg-gray-100 transition-colors"
-            >
-              Logout
-            </button>
+            <div className="flex items-center gap-3">
+              <Link
+                href={
+                  user.role === "client" ? "/profile" : "/operator/dashboard"
+                }
+                className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-teal-700"
+              >
+                {user.image ? (
+                  <img
+                    src={user.image}
+                    alt={`${user.name}'s profile`}
+                    className="w-8 h-8 rounded-full object-cover"
+                  />
+                ) : (
+                  <span>👤</span>
+                )}
+              </Link>
+
+              <span className="text-lg font-medium">Hi {user.name}!</span>
+              <button
+                onClick={() => {
+                  logOut();
+                  setIsLoggedIn(false);
+                }}
+                className="bg-white text-[#0CAFB9] px-4 py-1 rounded-full text-sm hover:bg-gray-100 transition-colors"
+              >
+                Logout
+              </button>
+            </div>
           )}
         </div>
 
@@ -130,15 +156,25 @@ export default function Navbar() {
                 </Link>
               </>
             ) : (
-              <button
-                onClick={() => {
-                  setIsOpen(false);
-                  signOut({ callbackUrl: "/" });
-                }}
-                className="w-40 bg-white text-[#0CAFB9] px-4 py-2 rounded-full text-sm hover:bg-gray-100 transition-colors"
-              >
-                Logout
-              </button>
+              <div className="flex items-center gap-3">
+                {user.image && (
+                  <img
+                    src={user.image}
+                    alt={`${user.name}'s profile`}
+                    className="w-8 h-8 rounded-full object-cover"
+                  />
+                )}
+                <span className="text-lg font-medium">Hi {user.name}! </span>
+                <button
+                  onClick={() => {
+                    logOut();
+                    setIsOpen(false);
+                  }}
+                  className="bg-white text-[#0CAFB9] px-4 py-1 rounded-full text-sm hover:bg-gray-100 transition-colors"
+                >
+                  Logout
+                </button>
+              </div>
             )}
           </div>
         </div>
