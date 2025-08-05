@@ -1,5 +1,6 @@
 import { useTourStore } from "@/store/tours/useToursStore";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 type Tour = {
   id: number;
@@ -38,6 +39,7 @@ export default function MyToursTable({
   tours,
   handleDeleteTour,
 }: any) {
+  const { t } = useTranslation();
   const open = useTourStore((state) => state.editTourOpenModal);
   const setEdit = useTourStore((state) => state.setEditTourOpenModal);
   const handleEdit = (id: number) => {
@@ -86,13 +88,13 @@ export default function MyToursTable({
                     className="px-3 py-1 rounded bg-[#E6F4F1] text-sm text-[#027373] hover:bg-[#d0ebe8]"
                     onClick={() => handleEdit(tour.id)}
                   >
-                    Edit
+                    {t("EDIT")}
                   </button>
                   <button
                     className="px-3 py-1 rounded bg-[#FBEAEA] text-sm text-[#D94141] hover:bg-[#f7dcdc]"
                     onClick={() => handleDelete(tour.id)}
                   >
-                    Delete
+                    {t("DELETE")}
                   </button>
                 </td>
               </tr>

@@ -6,6 +6,7 @@ import ImageDropzone from "./ImageDropZone";
 import AvailableDatesWithTimesPicker from "./AvailableDatesWithTimesPicker";
 import MultiTimeSlotPicker from "./MultiTimeSlotPicker"; // update path as needed
 import { calculateEndTime } from "./utils";
+import { useTranslation } from "react-i18next";
 
 export default function AddTourForm({
   submitForm,
@@ -20,6 +21,7 @@ export default function AddTourForm({
   dataToEdit?: any;
   handleUpdateTour: (data: any) => void;
 }) {
+  const { t } = useTranslation();
   const handleItineraryChange = (newList: string[]) => {
     setFormData((prev: any) => ({ ...prev, itinerary: newList }));
   };
@@ -202,7 +204,7 @@ export default function AddTourForm({
         type="submit"
         className="bg-[#027373] text-white px-6 py-2 rounded hover:bg-[#025d5d]"
       >
-        {dataToEdit.id ? "Update Tour" : "Add Tour"}
+        {dataToEdit.id ? t("UPDATE_TOUR") : t("ADD_TOUR")}
       </button>
     </form>
   );

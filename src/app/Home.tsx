@@ -12,8 +12,11 @@ import HowItWorks from "../components/organism/HowItWorks";
 import { Button } from "../components/atoms/Buttons/button";
 import { useRouter } from "next/navigation";
 import Footer from "../components/organism/Footer";
+import MobileToursSlider from "@/components/molecules/slider/MobileSlider";
+import { useTranslation } from "react-i18next";
 
 const Home = () => {
+  const { t } = useTranslation();
   const router = useRouter();
 
   const boatTours = [
@@ -78,13 +81,13 @@ const Home = () => {
   return (
     <div className="bg-white text-gray-900">
       {/* Hero Section */}
-      <section className="h-[90vh] flex items-center justify-center bg-[url('/images/rename.jpg')] bg-cover bg-center text-white">
-        <div className="text-center bg-black bg-opacity-40 p-6 rounded">
-          <h1 className="text-5xl font-bold mb-4">
+      <section className="h-[50vh] md:h-[90vh] flex items-center justify-center bg-[url('/images/rename.jpg')] bg-cover bg-center text-white">
+        <div className="text-center bg-none  bg-opacity-40 p-6 rounded">
+          <h1 className="text-3xl md:text-5xl font-bold mb-4">
             {" "}
             EXPLORE THE BEAUTY <p>OF BACALAR</p>
           </h1>
-          <p className="text-xl mb-6">
+          <p className="text-md mb-6 md:text-xl">
             Book your unforgettable tour experience now
           </p>
 
@@ -101,55 +104,114 @@ const Home = () => {
       <HowItWorks />
 
       {/* Boat Tours */}
-      <section className="py-32 px-4 md:px-16">
-        <h2 className="text-3xl font-semibold mb-8 text-center">Boat Tours</h2>
-        <Swiper
-          modules={[Navigation, Pagination]}
-          spaceBetween={20}
-          slidesPerView={1}
-          breakpoints={{
-            640: { slidesPerView: 1 },
-            768: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
-          }}
-          navigation
-          pagination={{ clickable: true }}
+      <section className="py-8 ps-4 md:py-32 md:px-16 border-b-14 border-gray-300">
+        <h2
+          className="
+    text-2xl sm:text-3xl md:text-4xl 
+    font-bold 
+    text-left lg:text-center 
+    text-primary 
+    mb-2 sm:mb-6 md:mb-8
+  "
         >
-          {boatTours.map((tour, index) => (
-            <SwiperSlide key={index}>
-              <Card {...tour} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+          {t("BOAT_TOURS")}
+        </h2>
+
+        <p
+          className="
+    text-sm sm:text-base md:text-lg 
+    text-gray-600 
+    leading-relaxed 
+    max-w-xl md:max-w-2xl 
+    text-left lg:text-center 
+    mx-auto sm:px-4
+    mb-4
+  "
+        >
+          {t("BOAT_TOUR_DESC")}
+        </p>
+        <div className="hidden md:block">
+          <Swiper
+            modules={[Navigation]}
+            spaceBetween={20}
+            slidesPerView={1}
+            breakpoints={{
+              640: { slidesPerView: 1 },
+              768: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+            }}
+            navigation
+            pagination={{ clickable: true }}
+          >
+            {boatTours.map((tour, index) => (
+              <SwiperSlide key={index}>
+                <Card {...tour} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+
+        <div className="md:hidden pb-10">
+          <MobileToursSlider tours={boatTours} />
+        </div>
       </section>
 
       {/* Restaurants */}
-      <section className="py-16 px-4 md:px-16 bg-gray-100">
-        <h2 className="text-3xl font-semibold mb-8 text-center">
-          Where to Eat
-        </h2>
-        <Swiper
-          modules={[Navigation, Pagination]}
-          spaceBetween={20}
-          slidesPerView={1}
-          breakpoints={{
-            640: { slidesPerView: 1 },
-            768: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
-          }}
-          navigation
-          pagination={{ clickable: true }}
+      <section className="py-16 px-4 md:px-16 bg-gray-100 border-b-14 border-gray-300">
+        <h2
+          className="
+    text-2xl sm:text-3xl md:text-4xl 
+    font-bold 
+    text-left lg:text-center 
+    text-primary 
+    mb-2 sm:mb-6 md:mb-8
+  "
         >
-          {restaurants.map((rest, index) => (
-            <SwiperSlide key={index}>
-              <Card {...rest} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+          {t("WHERE_TO_EAT")}
+        </h2>
+
+        <p
+          className="
+    text-sm sm:text-base md:text-lg 
+    text-gray-600 
+    leading-relaxed 
+    max-w-xl md:max-w-2xl 
+    text-left lg:text-center 
+    mx-auto sm:px-4
+    mb-4
+  "
+        >
+          {t("WHERE_TO_EAT_DESC")}
+        </p>
+
+        <div className="hidden md:block">
+          <Swiper
+            modules={[Navigation, Pagination]}
+            spaceBetween={20}
+            slidesPerView={1}
+            breakpoints={{
+              640: { slidesPerView: 1 },
+              768: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+            }}
+            navigation
+            pagination={{ clickable: true }}
+          >
+            {restaurants.map((rest, index) => (
+              <SwiperSlide key={index}>
+                <Card {...rest} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+
+        <div className="md:hidden pb-10">
+          <MobileToursSlider tours={restaurants} />
+        </div>
       </section>
 
       {/* WhatsApp CTA */}
-      <section className="py-12 text-center">
+      <section className="py-12 text-center border-b-14 border-gray-300">
         <h2 className="text-2xl font-semibold mb-4">
           Ready to book your tour?
         </h2>

@@ -7,9 +7,11 @@ import {
   OperatorProfileTable,
   TourAvailabilityTable,
   TourTimeSlotsTable,
+  BookingsTable,
+  UserTable,
 } from "@/drizzle/schema";
 import { db } from "@/drizzle/db";
-import { eq, and, inArray } from "drizzle-orm";
+import { eq, and, inArray, sql, desc } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid"; // ensure this is imported
 
 // CREATE TOUR
@@ -262,4 +264,68 @@ export async function generateUniqueSlug(title: string): Promise<string> {
   }
 
   return slug;
+}
+
+export async function getOperatorId(userId: string) {
+  const operator = await db.query.OperatorProfileTable.findFirst({
+    where: eq(OperatorProfileTable.userId, userId),
+    columns: { id: true },
+  });
+
+  return operator?.id ?? null;
+}
+
+// Fetch total tours, total bookings, total customers
+export async function getDashboardSummary(operatorId: string) {
+  const [tourCount] = await db
+    .select({ count: sql<number>`COUNT(*)` })
+    .from(ToursTable)
+    .where(eq(ToursTable.operatorId, operatorId));
+
+  const [bookingCount] = await db
+    .select({ count: sql<number>`COUNT(*)` })
+    .from(BookingsTable)
+    .innerJoin(ToursTable, eq(BookingsTable.tourId, ToursTable.id))
+    .where(eq(ToursTable.operatorId, operatorId));
+
+  const [customerCount] = await db
+    .select({ count: sql<number>`COUNT(DISTINCT ${BookingsTable.userId})` })
+    .from(BookingsTable)
+    .innerJoin(ToursTable, eq(BookingsTable.tourId, ToursTable.id))
+    .where(eq(ToursTable.operatorId, operatorId));
+
+  return {
+    totalTours: tourCount.count,
+    totalBookings: bookingCount.count,
+    totalCustomers: customerCount.count,
+  };
+}
+
+// Fetch upcoming tours
+export async function getUpcomingTours(operatorId: string) {
+  return await db
+    .select({
+      title: ToursTable.title,
+      createdAt: ToursTable.createdAt,
+    })
+    .from(ToursTable)
+    .where(eq(ToursTable.operatorId, operatorId))
+    .orderBy(ToursTable.createdAt)
+    .limit(3);
+}
+
+// Fetch recent bookings
+export async function getRecentBookings(operatorId: string) {
+  return await db
+    .select({
+      tourTitle: ToursTable.title,
+      customerName: UserTable.name,
+      date: BookingsTable.date,
+    })
+    .from(BookingsTable)
+    .innerJoin(ToursTable, eq(BookingsTable.tourId, ToursTable.id))
+    .innerJoin(UserTable, eq(BookingsTable.userId, UserTable.id))
+    .where(eq(ToursTable.operatorId, operatorId))
+    .orderBy(desc(BookingsTable.date))
+    .limit(3);
 }

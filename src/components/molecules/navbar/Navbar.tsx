@@ -6,29 +6,43 @@ import clsx from "clsx";
 import { Menu, X } from "lucide-react";
 import { logOut } from "@/auth/nextjs/actions";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 export default function Navbar({ user }: any) {
+  const { t, i18n } = useTranslation();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(!!user?.name);
-  // Generate links dynamically based on role
+
+  console.log("i18n language:", i18n.language);
+  console.log("i18n", i18n);
+  console.log("tttttt", t);
+  console.log("Test HOME:", t("HOME"));
+  console.log("SIGN_UP:", t("SIGN_UP"));
+
   const navLinks = [
-    { href: "/", label: "HOME" },
-    { href: "/tours", label: "TOURS" },
-    { href: "/destinations", label: "DESTINATIONS" },
-    { href: "/restaurants", label: "RESTAURANTS" },
+    { href: "/", label: t("HOME") },
+    { href: "/tours", label: t("TOURS") },
+    { href: "/destinations", label: t("DESTINATIONS") },
+    { href: "/restaurants", label: t("RESTAURANT") },
     ...(user?.role === "operator"
-      ? [{ href: "/operator/dashboard", label: "OPERATOR" }]
+      ? [{ href: "/operator/dashboard", label: t("OPERATOR") }]
       : []),
-    ...(user?.role === "user" ? [{ href: "/profile", label: "PROFILE" }] : []),
+    ...(user?.role === "user"
+      ? [{ href: "/profile", label: t("PROFILE") }]
+      : []),
   ];
 
   return (
-    <nav className="bg-[#0CAFB9] text-white py-5 px-4 md:px-12">
+    <nav className="bg-[#0CAFB9] text-white py-0 px-4 md:px-12">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <div className="text-lg font-bold tracking-wide uppercase">
+        <div className=" font-bold tracking-wide uppercase">
           <Link href="/" className="text-white hover:text-orange-300">
-            <img className="w-14 rounded-b-full" src="/logo.png" alt="logo" />
+            <img
+              className="w-36 h-26 rounded-b-full"
+              src="/logo.png"
+              alt="logo"
+            />
           </Link>
         </div>
 
@@ -62,24 +76,24 @@ export default function Navbar({ user }: any) {
                 href="/sign-in"
                 className="text-white border border-white px-4 py-1 rounded-full text-sm hover:bg-white hover:text-[#0CAFB9] transition-colors"
               >
-                Sign In
+                {t("SIGN_IN")}
               </Link>
               <Link
                 href="/sign-up"
                 className="bg-orange-400 text-white px-4 py-1 rounded-full text-sm hover:bg-orange-500 transition-colors"
               >
-                Sign Up
+                {t("SIGN_UP")}
               </Link>
             </>
           ) : (
             <div className="flex items-center gap-3">
               <Link
                 href={
-                  user.role === "client" ? "/profile" : "/operator/dashboard"
+                  user?.role === "client" ? "/profile" : "/operator/dashboard"
                 }
                 className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-teal-700"
               >
-                {user.image ? (
+                {user?.image ? (
                   <img
                     src={user.image}
                     alt={`${user.name}'s profile`}
@@ -90,7 +104,7 @@ export default function Navbar({ user }: any) {
                 )}
               </Link>
 
-              <span className="text-lg font-medium">Hi {user.name}!</span>
+              <span className="text-lg font-medium">Hi {user?.name}!</span>
               <button
                 onClick={() => {
                   logOut();
@@ -98,7 +112,7 @@ export default function Navbar({ user }: any) {
                 }}
                 className="bg-white text-[#0CAFB9] px-4 py-1 rounded-full text-sm hover:bg-gray-100 transition-colors"
               >
-                Logout
+                {t("LOG_OUT")}
               </button>
             </div>
           )}
@@ -145,26 +159,26 @@ export default function Navbar({ user }: any) {
                   onClick={() => setIsOpen(false)}
                   className="w-40 text-white border border-white px-4 py-2 rounded-full text-sm hover:bg-white hover:text-[#0CAFB9] transition-colors"
                 >
-                  Sign In
+                  {t("SIGN_IN")}{" "}
                 </Link>
                 <Link
                   href="/auth/signup"
                   onClick={() => setIsOpen(false)}
                   className="w-40 bg-orange-400 text-white px-4 py-2 rounded-full text-sm hover:bg-orange-500 transition-colors"
                 >
-                  Sign Up
+                  {t("SIGN_UP")}{" "}
                 </Link>
               </>
             ) : (
               <div className="flex items-center gap-3">
-                {user.image && (
+                {user?.image && (
                   <img
-                    src={user.image}
-                    alt={`${user.name}'s profile`}
+                    src={user?.image}
+                    alt={`${user?.name}'s profile`}
                     className="w-8 h-8 rounded-full object-cover"
                   />
                 )}
-                <span className="text-lg font-medium">Hi {user.name}! </span>
+                <span className="text-lg font-medium">Hi {user?.name}! </span>
                 <button
                   onClick={() => {
                     logOut();
@@ -172,7 +186,7 @@ export default function Navbar({ user }: any) {
                   }}
                   className="bg-white text-[#0CAFB9] px-4 py-1 rounded-full text-sm hover:bg-gray-100 transition-colors"
                 >
-                  Logout
+                  {t("LOG_OUT")}
                 </button>
               </div>
             )}

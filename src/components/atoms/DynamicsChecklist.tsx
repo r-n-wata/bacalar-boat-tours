@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 type DynamicChecklistFieldProps = {
   label: string;
@@ -13,6 +14,7 @@ const DynamicChecklistField = ({
   values = [],
   onChange,
 }: DynamicChecklistFieldProps) => {
+  const { t } = useTranslation();
   const [inputValue, setInputValue] = useState("");
   const [items, setItems] = useState<string[]>(values);
 
@@ -48,7 +50,7 @@ const DynamicChecklistField = ({
           className="px-4 py-2 bg-teal-600 text-white rounded hover:bg-teal-700"
           onClick={handleAdd}
         >
-          Add
+          {t("ADD")}
         </button>
       </div>
 
@@ -70,7 +72,7 @@ const DynamicChecklistField = ({
               onClick={() => handleRemove(index)}
               className="text-red-500 hover:text-red-700 text-sm"
             >
-              Remove
+              {t("REMOVE")}
             </button>
           </div>
         ))}
