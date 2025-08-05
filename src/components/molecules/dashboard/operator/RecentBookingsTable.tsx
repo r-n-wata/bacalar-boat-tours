@@ -11,9 +11,11 @@ export default function RecentBookingsTable({
 }) {
   return (
     <div className="bg-white shadow rounded-lg p-4 w-full">
-      <h3 className="text-lg font-semibold mb-2">Recent Bookings</h3>
+      <h3 className="text-lg font-semibold mb-2 text-gray-800">
+        Recent Bookings
+      </h3>
       <table className="w-full text-left">
-        <thead className="text-gray-500">
+        <thead className="text-gray-600">
           <tr>
             <th className="pb-2">Tour</th>
             <th className="pb-2">Customer</th>
@@ -22,7 +24,7 @@ export default function RecentBookingsTable({
         </thead>
         <tbody>
           {bookings.map((b, index) => (
-            <tr key={index} className="border-t">
+            <tr key={index} className="border-t text-gray-500">
               <td className="py-2">{b.tour}</td>
               <td>{b.customer}</td>
               <td>{b.date}</td>

@@ -1,10 +1,8 @@
-// import Swiper styles and modules
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import { Navigation, Pagination } from "swiper/modules";
+import { useTranslation } from "react-i18next";
+import MobileToursSlider from "./MobileSlider";
 
 const tours = [
   {
@@ -30,18 +28,44 @@ const tours = [
   },
 ];
 
-/**
- * A slider for popular tours.
- *
- * @returns A Swiper component with slides for three popular tours.
- */
 export default function PopularToursSlider() {
+  const { t } = useTranslation();
+
   return (
-    <div className="px-40 py-28 bg-cream">
-      <h2 className="text-3xl font-bold text-center text-primary mb-12">
-        Popular Tours
+    <div className="py-8 ps-4 md:py-32  md:px-16 lg:px-40 sm:py-28  bg-white sm:mb-10 border-b-14 border-gray-300">
+      <h2
+        className="
+    text-2xl sm:text-3xl md:text-4xl 
+    font-bold 
+    text-left lg:text-center 
+    text-primary 
+    mb-2 sm:mb-6 md:mb-8
+  "
+      >
+        {t("POPULAR_TOURS")}
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+      <p
+        className="
+    text-sm sm:text-base md:text-lg 
+    text-gray-600 
+    leading-relaxed 
+    max-w-xl md:max-w-2xl 
+    text-left lg:text-center 
+    mx-auto sm:px-4
+    mb-4
+  "
+      >
+        {t("POPULAR_TOURS_DESC")}
+      </p>
+
+      {/* Mobile/Tablet Swipe-Only */}
+      <div className="md:hidden pb-10">
+        <MobileToursSlider tours={tours} />
+      </div>
+
+      {/* Desktop Grid */}
+      <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-8">
         {tours.map((tour, idx) => (
           <div
             key={idx}

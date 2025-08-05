@@ -7,6 +7,7 @@ import {
   UserTable,
   TourAvailabilityTable,
   TourTimeSlotsTable,
+  OperatorProfileTable,
 } from "@/drizzle/schema";
 import { eq, sql, and } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
@@ -14,6 +15,7 @@ import { sendBookingConfirmation } from "../core/sendBookingConfirmation";
 import { alias } from "drizzle-orm/pg-core";
 import { sendCancellationEmail } from "../core/sendCancellationEmail";
 import { format } from "date-fns"; // or use .toISOString().slice(0, 10)
+import { sendOperatorNotification } from "../core/sendOperatorNotification";
 
 /**
  * Fetches all tours from the database.
@@ -204,8 +206,6 @@ export async function createBooking({
       }
     }
 
-    console.log("timeSlotId", timeSlotId);
-
     // 2. Validate the selected time slot
     const [slot] = await db
       .select({
@@ -238,7 +238,6 @@ export async function createBooking({
       );
 
     const remaining = slot.capacity - booked;
-
     if (numPeople > remaining) {
       return {
         error: `Only ${remaining} spot(s) left in this time slot.`,
@@ -262,7 +261,7 @@ export async function createBooking({
       status,
     });
 
-    // 5. Optional: update availability logic if confirmed
+    // 5. Update availability if needed
     if (status === "confirmed") {
       const [{ newBooked = 0 }] = await db
         .select({
@@ -277,7 +276,6 @@ export async function createBooking({
         );
 
       const remainingCapacity = slot.capacity - newBooked;
-
       if (remainingCapacity <= 0) {
         await db
           .update(TourTimeSlotsTable)
@@ -286,7 +284,7 @@ export async function createBooking({
       }
     }
 
-    // 6. Send email
+    // 6. Send booking confirmation to customer
     await sendBookingConfirmation({
       name,
       email,
@@ -299,6 +297,34 @@ export async function createBooking({
         ? undefined
         : (verificationToken ?? undefined),
     });
+
+    // 7. Send operator notification
+    const [operator] = await db
+      .select({
+        operatorEmail: UserTable.email,
+        operatorName: UserTable.name,
+      })
+      .from(ToursTable)
+      .innerJoin(
+        OperatorProfileTable,
+        eq(ToursTable.operatorId, OperatorProfileTable.id)
+      )
+      .innerJoin(UserTable, eq(OperatorProfileTable.userId, UserTable.id))
+      .where(eq(ToursTable.id, tourId))
+      .limit(1);
+
+    if (operator) {
+      await sendOperatorNotification({
+        operatorEmail: operator.operatorEmail,
+        operatorName: operator.operatorName,
+        tourTitle,
+        date,
+        time: slot.start,
+        numPeople,
+        customerName: name,
+        specialRequests,
+      });
+    }
 
     return { success: true };
   } catch (error) {

@@ -9,9 +9,24 @@ type Props = {
 };
 
 const SearchAndFilterBar = ({ setSearchTerm, filters, setFilters }: Props) => (
-  <div className="flex gap-4 justify-center items-center w-1/2 mb-10 bg-cream px-10 py-4 rounded">
+  <div
+    className="
+      flex flex-col sm:flex-row 
+      gap-4 
+      justify-center 
+      items-stretch sm:items-center 
+      w-full sm:w-4/5 md:w-2/3 lg:w-1/2 
+      mb-8 
+      bg-cream 
+      px-4 sm:px-6 md:px-10 
+      py-4 
+      rounded-lg 
+      shadow-md
+    "
+  >
+    {/* Price Filter */}
     <select
-      className="rounded-lg px-4 py-2 bg-white text-gray-700 shadow"
+      className="flex-1 min-w-0 rounded-lg px-4 py-2 bg-white text-gray-700 shadow"
       onChange={(e) => setFilters({ ...filters, price: e.target.value })}
     >
       <option value="">Price</option>
@@ -19,8 +34,10 @@ const SearchAndFilterBar = ({ setSearchTerm, filters, setFilters }: Props) => (
       <option value="mid">Mid</option>
       <option value="high">High</option>
     </select>
+
+    {/* Duration Filter */}
     <select
-      className="rounded-lg px-4 py-2 bg-white text-gray-700 shadow"
+      className="flex-1 min-w-0 rounded-lg px-4 py-2 bg-white text-gray-700 shadow"
       onChange={(e) => setFilters({ ...filters, duration: e.target.value })}
     >
       <option value="">Duration</option>
@@ -30,8 +47,10 @@ const SearchAndFilterBar = ({ setSearchTerm, filters, setFilters }: Props) => (
       <option value="6">6 hours</option>
       <option value="8">8 hours</option>
     </select>
+
+    {/* Tour Type Filter */}
     <select
-      className="rounded-lg px-4 py-2 bg-white text-gray-700 shadow"
+      className="flex-1 min-w-0 rounded-lg px-4 py-2 bg-white text-gray-700 shadow"
       onChange={(e) => setFilters({ ...filters, type: e.target.value })}
     >
       <option value="">Tour Type</option>
@@ -39,10 +58,12 @@ const SearchAndFilterBar = ({ setSearchTerm, filters, setFilters }: Props) => (
       <option value="eco">Eco</option>
       <option value="private">Private</option>
     </select>
+
+    {/* Search Input */}
     <input
       type="text"
       placeholder="Search"
-      className="rounded-lg px-4 py-2 bg-white text-gray-700 shadow"
+      className="flex-1 min-w-0 rounded-lg px-4 py-2 bg-white text-gray-700 shadow"
       onChange={(e) => setSearchTerm(e.target.value)}
     />
   </div>

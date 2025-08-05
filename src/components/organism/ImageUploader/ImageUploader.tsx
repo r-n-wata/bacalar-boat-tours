@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import { useTranslation } from "react-i18next";
 
 export default function ImageUploader() {
+  const { t } = useTranslation();
   const [file, setFile] = useState<File | null>(null);
   const [url, setUrl] = useState<string>("");
 
@@ -39,7 +41,7 @@ export default function ImageUploader() {
         className="mt-2 bg-blue-500 text-white px-4 py-2 rounded"
         onClick={handleUpload}
       >
-        Upload
+        {t("UPLOAD")}
       </button>
 
       {url && (
