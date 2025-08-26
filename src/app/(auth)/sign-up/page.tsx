@@ -5,7 +5,7 @@ import { useState } from "react";
 import OperatorSignup from "../../../auth/nextjs/components/operator/operatorSignup";
 import ClientSignup from "@/auth/nextjs/components/client/clientSignup";
 import { Button } from "../../../components/atoms/Buttons/button"; // Reusable button
-import BackButton from "../../../components/atoms/Buttons/backButton";
+import BackButton from "../../../components/atoms/Buttons/BackButton";
 
 type SignUpOptions = "business" | "client";
 
