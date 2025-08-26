@@ -27,7 +27,7 @@ export async function signIn(unsafeData: z.infer<typeof signInShema>) {
     where: eq(UserTable.email, data.email),
   });
 
-  console.log("user", user);
+  console.log("user", user)
   if (user == null || user.password == null || user.salt == null) {
     return {
       error: "Unable to log you in, user not found",
