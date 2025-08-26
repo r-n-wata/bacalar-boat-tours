@@ -18,9 +18,9 @@ export default function SignupPage() {
       style={{ backgroundImage: "url('/images/background1.jpg')" }}
     >
       {/* Position back button in top-right */}
-      <div className="absolute top-6 left-6 z-10">
-        <BackButton to="/" label="Back to Home" />
-      </div>{" "}
+      
+      
+      
       <div className="max-w-3xl w-full space-y-8 py-24">
         {/* ← back to landing */}
 
