@@ -37,10 +37,10 @@ export default function Navbar({ user }: any) {
 
   return (
     <nav className="bg-[#0CAFB9] text-white py-0 px-4 md:px-12">
-      <div className="h-20 max-w-7xl mx-auto flex items-center justify-between">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className=" font-bold tracking-wide uppercase">
-          {/* Link to Homepage just the same as the back button */}
-          {/*
+          
+          
           <Link href="/" className="text-white hover:text-orange-300">
             <img
               className="w-36 h-26 rounded-b-full"
@@ -48,8 +48,7 @@ export default function Navbar({ user }: any) {
               alt="logo"
             />
           </Link>
-          */}
-          <BackButton to="/" label="Back to Home" className='' />
+
         </div>
 
         {/* Desktop Nav Links */}
