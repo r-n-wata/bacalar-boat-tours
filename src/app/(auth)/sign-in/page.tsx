@@ -13,16 +13,16 @@ export default function SignupPage() {
 
   return (
     <main
-      className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat px-4"
+      className="min-h-screen bg-cover bg-center bg-no-repeat px-4"
       style={{ backgroundImage: "url('/images/background1.jpg')" }}
     >
-       {/* Position back button in top-right */}
-      <div className="">
+      {/* Position back button in top-right */}
+      {/* ← back to landing */}
+      <div className="mt-4">
         <BackButton to="/" label="Back to Home" />
       </div>{" "}
-      {/* Position back button in top-right */}
-      <div className="max-w-3xl w-full space-y-8 py-24">
-        {/* ← back to landing */}
+      <div className='flex items-center justify-center'>
+      <div className="max-w-3xl w-full space-y-8 ">
 
         <h1 className="text-3xl font-bold text-center text-cream">Sign in</h1>
 
@@ -32,6 +32,7 @@ export default function SignupPage() {
         {/* Form card */}
         <div className="bg-white/90 border border-gray-200 rounded-xl p-8 shadow-lg backdrop-blur-sm">
           <Signin />
+        </div>
         </div>
       </div>
     </main>
