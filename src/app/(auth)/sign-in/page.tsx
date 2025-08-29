@@ -13,14 +13,9 @@ export default function SignupPage() {
 
   return (
     <main
-      className="min-h-screen bg-cover bg-center bg-no-repeat px-4"
+      className="min-h-screen bg-cover bg-center bg-no-repeat px-4 mt-4"
       style={{ backgroundImage: "url('/images/background1.jpg')" }}
     >
-      {/* Position back button in top-right */}
-      {/* ← back to landing */}
-      <div className="mt-4">
-        <BackButton to="/" label="Back to Home" />
-      </div>{" "}
       <div className='flex items-center justify-center'>
       <div className="max-w-3xl w-full space-y-8 ">
 
